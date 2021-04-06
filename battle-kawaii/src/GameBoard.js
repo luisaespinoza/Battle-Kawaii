@@ -1,6 +1,7 @@
 
 // console.log("I live!") 
 const puzzlePieces = ['Red','Green','Blue','Yellow']
+const legalMoveCandidates = []
 
 const createGameBoard = (x, y) => {
   let board = []
@@ -40,7 +41,7 @@ const checkNextIn=(x , y, axis, direction) => {
   // if the next tile on the axis matches: 
   // add direction constant to axis coordinate and check next in line
   // else return this value as the end of the series
-  if (axis=== 'x') {
+  if (axis === 'x') {
     if(checkMatch(x, y, x + c, y)) {
       let xNew = x + c
       // launch recursive callback for next in line
@@ -67,6 +68,7 @@ const checkMatches = (x, y) => {
     end:[x,y],
     xMatchRange:null,
     yMatchRange:null,
+    isCandidate: false
   } 
 
   const axes = ['x','y']
@@ -90,13 +92,19 @@ const checkMatches = (x, y) => {
   if (xHasMatches || yHasMatches){
     matchResults.hasMatches = true
   }
+
+  xHasMatches = matchRanges[0] >= 2
+  yHasMatches = matchRanges[1] >= 2
+  if (xHasMatches || yHasMatches){
+    matchResults.isCandidate = true
+  }
   // update match ranges anyway. A series of 2 can be used as
   // candidates to check if the board has legal moves?? Hmm...
   // Might need to create new propery called candidateForMatch
   // and store any that flag true into an array, 
   // instead of checking the entire board. 
-  matchResults.xMatchRange = xHasMatches
-  matchResults.yMatchRange = yHasMatches
+  matchResults.xMatchRange = matchRanges[0]
+  matchResults.yMatchRange = matchRanges[1]
   // returns object of results 
   return matchResults
 }
@@ -109,15 +117,52 @@ const randomizeBoard = () => {
       // generate a random piece in place until a piece 
       // that doesn't create a 3 series is generated.
       let isMatching = true
+      let matchesFound
       while(isMatching) {
         board[i][j] = getRandomPiece()
-        let matchesFound = checkMatches(i,j)
+        matchesFound = checkMatches(i,j)
         isMatching = matchesFound.hasMatches
+      }
+      if(matchesFound.isCandidate) {
+        legalMoveCandidates.push(matchesFound)
       }
       // succeeding, carry on to next tile
     }
   }
+  console.log(board)
 }
 
-
-console.log(board)
+const checkBoardHasMoves = () => {
+  for(let i = 0; i<=legalMoveCandidates.length; i++) {
+    let candidate = legalMoveCandidates[i]
+    let xStart = candidate.start[0]
+    let yStart = candidate.start[1]
+    let xEnd = candidate.end[0]
+    let yEnd = candidate.end[1]
+    if(candidate.xMatchRange >= 2) {
+      let toCheck = candidate.start[0] - 2
+      console.log("checking...",xStart,yStart,toCheck,yStart,checkMatch(xStart,yStart,toCheck,yStart))
+      if (checkMatch(xStart,yStart,toCheck,yStart)){
+        return true
+      }
+      toCheck = candidate.end[0] + 2
+      console.log("checking...",xEnd,yEnd,toCheck,yEnd,checkMatch(xStart,yStart,toCheck,yStart))
+      if (checkMatch(xEnd,yEnd,toCheck, yEnd)) {
+        return true
+      }
+    }
+    else if(candidate.yMatchRange >= 2) {
+      let toCheck = candidate.start[1] - 2
+      console.log("checking...",xStart,yStart,xStart,toCheck,checkMatch(xStart,yStart,xStart,toCheck))
+      if (checkMatch(xStart,yStart,xStart,toCheck)){
+        return true
+      }
+      toCheck = candidate.end[1] + 2
+      console.log("checking...",xEnd,yEnd,xEnd,yEnd,checkMatch(xStart,yStart,xStart,toCheck))
+      if (checkMatch(xEnd,yEnd,xEnd, toCheck)) {
+        return true
+      }
+    }
+  }
+  return false
+}
