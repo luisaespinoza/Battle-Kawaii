@@ -3,6 +3,7 @@
 const puzzlePieces = ['Red','Green','Blue','Yellow']
 const legalMoveCandidates = []
 
+
 const createGameBoard = (x, y) => {
   let board = []
   for( let i = 0 ; i < x ; i++) {
@@ -19,6 +20,7 @@ let board = createGameBoard(6,6)
 const getRandomPiece = () => {
   return puzzlePieces[Math.floor(Math.random()*puzzlePieces.length)]
 }
+
 
 const checkMatch = (x1, y1, x2, y2) => {
   // is next piece on the board?
@@ -60,6 +62,7 @@ const checkNextIn=(x , y, axis, direction) => {
     }
   }
 }
+
 
 const checkMatches = (x, y) => {
   let matchResults = {
@@ -109,6 +112,7 @@ const checkMatches = (x, y) => {
   return matchResults
 }
 
+
 const randomizeBoard = () => {
   let x = board.length
   let y = board[0].length
@@ -132,6 +136,7 @@ const randomizeBoard = () => {
   console.log(board)
 }
 
+
 const checkBoardHasMoves = () => {
   for(let i = 0; i<=legalMoveCandidates.length; i++) {
     let candidate = legalMoveCandidates[i]
@@ -146,7 +151,7 @@ const checkBoardHasMoves = () => {
         return true
       }
       toCheck = candidate.end[0] + 2
-      console.log("checking...",xEnd,yEnd,toCheck,yEnd,checkMatch(xStart,yStart,toCheck,yStart))
+      console.log("checking...",xEnd,yEnd,toCheck,yEnd,checkMatch(xEnd,yEnd,toCheck,yEnd))
       if (checkMatch(xEnd,yEnd,toCheck, yEnd)) {
         return true
       }
@@ -158,7 +163,7 @@ const checkBoardHasMoves = () => {
         return true
       }
       toCheck = candidate.end[1] + 2
-      console.log("checking...",xEnd,yEnd,xEnd,yEnd,checkMatch(xStart,yStart,xStart,toCheck))
+      console.log("checking...",xEnd,yEnd,xEnd,yEnd,checkMatch(xEnd,yEnd,xEnd,toCheck))
       if (checkMatch(xEnd,yEnd,xEnd, toCheck)) {
         return true
       }
