@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import GameModel from "../models/game"
+import GameModel from "../models/Game"
 
 // define the custom hook with the "use" naming convention
 function useGames(gameId) {
