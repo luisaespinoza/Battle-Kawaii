@@ -136,7 +136,6 @@ const randomizeBoard = () => {
   console.log(board)
 }
 
-
 const checkBoardHasMoves = () => {
   for(let i = 0; i<=legalMoveCandidates.length; i++) {
     let candidate = legalMoveCandidates[i]
@@ -144,26 +143,26 @@ const checkBoardHasMoves = () => {
     let yStart = candidate.start[1]
     let xEnd = candidate.end[0]
     let yEnd = candidate.end[1]
-    if(candidate.xMatchRange >= 2) {
+    if (candidate.xMatchRange >= 2) {
       let toCheck = candidate.start[0] - 2
-      console.log("checking...",xStart,yStart,toCheck,yStart,checkMatch(xStart,yStart,toCheck,yStart))
-      if (checkMatch(xStart,yStart,toCheck,yStart)){
+      console.log("Checking...",xStart,yStart,toCheck,yStart,checkMatch(xStart,yStart,toCheck,yStart))
+      if (checkMatch(xStart,yStart,toCheck,yStart)) {
         return true
       }
       toCheck = candidate.end[0] + 2
-      console.log("checking...",xEnd,yEnd,toCheck,yEnd,checkMatch(xEnd,yEnd,toCheck,yEnd))
+      console.log("Checking...",xEnd,yEnd,toCheck,yEnd,checkMatch(xEnd,yEnd,toCheck,yEnd))
       if (checkMatch(xEnd,yEnd,toCheck, yEnd)) {
         return true
       }
     }
-    else if(candidate.yMatchRange >= 2) {
+    else if (candidate.yMatchRange >= 2) {
       let toCheck = candidate.start[1] - 2
-      console.log("checking...",xStart,yStart,xStart,toCheck,checkMatch(xStart,yStart,xStart,toCheck))
-      if (checkMatch(xStart,yStart,xStart,toCheck)){
+      console.log("Checking...",xStart,yStart,xStart,toCheck,checkMatch(xStart,yStart,xStart,toCheck))
+      if (checkMatch(xStart,yStart,xStart,toCheck)) {
         return true
       }
       toCheck = candidate.end[1] + 2
-      console.log("checking...",xEnd,yEnd,xEnd,yEnd,checkMatch(xEnd,yEnd,xEnd,toCheck))
+      console.log("Checking...",xEnd,yEnd,xEnd,toCheck,checkMatch(xEnd,yEnd,xEnd,toCheck))
       if (checkMatch(xEnd,yEnd,xEnd, toCheck)) {
         return true
       }

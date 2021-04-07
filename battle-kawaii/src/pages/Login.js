@@ -12,7 +12,7 @@ function Login(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    AuthModel.login({ email, password }).then(json => {
+    AuthModel.login({email, password}).then(json => {
       console.log(json);
       localStorage.setItem("uid", json.signedJwt);
       AuthModel.verify().then(data => {

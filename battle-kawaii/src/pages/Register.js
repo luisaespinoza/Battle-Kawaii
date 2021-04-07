@@ -8,9 +8,14 @@ function Register(props) {
   const [password, setPassword] = useState("");
 
   function handleSubmit(event) {
+    console.log(event)
     event.preventDefault();
-    // TODO: Complete Auth Model functions and then use one
-    //       here to register a new user.
+    AuthModel.register({ username, email, password }).then((response) => {
+      console.log(response)
+      if (response.status === 201) {
+        props.history.push("/login")
+      }
+    })
   }
 
   return (
