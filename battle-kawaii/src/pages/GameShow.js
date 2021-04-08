@@ -1,14 +1,14 @@
 import React from 'react';
 
 import useGames from '../hooks/useGames'
-import GameCard from '../components/GameCard'
+import GameBoard from '../components/GameBoard'
 
 function GameShow(props) {
-  const [game] = useGames(props.match.params.id)
+  // const [game] = useGames(props.match.params.id)
   
   return (
     <div>
-      <GameCard {...game} />
+      <GameBoard />
     </div>
   );
 }

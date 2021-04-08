@@ -1,10 +1,10 @@
 
 // console.log("I live!") 
-const puzzlePieces = ['Red','Green','Blue','Yellow']
-const legalMoveCandidates = []
+export const puzzlePieces = ['red','green','blue','yellow']
+export const legalMoveCandidates = []
 
 
-const createGameBoard = (x, y) => {
+export const createGameBoard = (x, y) => {
   let board = []
   for( let i = 0 ; i < x ; i++) {
     board.push(new Array(y))
@@ -13,16 +13,16 @@ const createGameBoard = (x, y) => {
 }
 
 
-let board = createGameBoard(6,6)
+export let board = createGameBoard(6,6)
 
 
 
-const getRandomPiece = () => {
+export const getRandomPiece = () => {
   return puzzlePieces[Math.floor(Math.random()*puzzlePieces.length)]
 }
 
 
-const checkMatch = (x1, y1, x2, y2) => {
+export const checkMatch = (x1, y1, x2, y2) => {
   // is next piece on the board?
   let isXInBounds = ( x2 < board.length && 0 <= x2 )
   if(isXInBounds) {
@@ -37,7 +37,7 @@ const checkMatch = (x1, y1, x2, y2) => {
 }
 
 
-const checkNextIn=(x , y, axis, direction) => {
+export const checkNextIn=(x , y, axis, direction) => {
   // 'c' is our constant incrementer/decrementer for the recursive callback chain
   const c = (direction === '+') ? 1 : -1
   // if the next tile on the axis matches: 
@@ -64,7 +64,7 @@ const checkNextIn=(x , y, axis, direction) => {
 }
 
 
-const checkMatches = (x, y) => {
+export const checkMatches = (x, y) => {
   let matchResults = {
     hasMatches: false,
     start: [x,y],
@@ -113,7 +113,7 @@ const checkMatches = (x, y) => {
 }
 
 
-const randomizeBoard = () => {
+export const randomizeBoard = () => {
   let x = board.length
   let y = board[0].length
   for(let i = 0 ; i < x ; i++){
@@ -136,7 +136,7 @@ const randomizeBoard = () => {
   console.log(board)
 }
 
-const checkBoardHasMoves = () => {
+export const checkBoardHasMoves = () => {
   for(let i = 0; i<=legalMoveCandidates.length; i++) {
     let candidate = legalMoveCandidates[i]
     let xStart = candidate.start[0]
