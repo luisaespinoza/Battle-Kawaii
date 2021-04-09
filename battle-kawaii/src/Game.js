@@ -71,6 +71,8 @@ export const checkMatches = (x, y) => {
     end:[x,y],
     xMatchRange:null,
     yMatchRange:null,
+    xMatchColor:null,
+    yMatchColor:null,
     isCandidate: false
   } 
 
@@ -93,6 +95,8 @@ export const checkMatches = (x, y) => {
   let xHasMatches = matchRanges[0] >= 3
   let yHasMatches = matchRanges[1] >= 3
   if (xHasMatches || yHasMatches){
+    matchResults.xMatchColor= xHasMatches ? matchResults.start[0] : null
+    matchResults.yMatchColor= yHasMatches ? matchResults.start[0] : null
     matchResults.hasMatches = true
   }
 
@@ -169,4 +173,27 @@ export const checkBoardHasMoves = () => {
     }
   }
   return false
+}
+const updateGame= (results1,results2) => {
+  if (results1.xMatchRange >=3) {
+
+  }
+  if (results1.yMatchRange >=3) {
+
+  }
+  if(results2.xMatchRange >=3 ){
+
+  }
+  if (results2.yMatchRange >=3 ) {
+
+  }
+
+export const swapPieces = (x1,y1,x2,y2) =>{
+  let firstPiece = board[x1][y1]
+  let secondPiece = board[x2][y2]
+  board[x1][y1] = secondPiece
+  board[x2][y2] = firstPiece
+  let results1 = checkMatches(x1,y1)
+  let results2 = checkMatches(x2,y2)
+  updateGame(results1,results2)
 }
