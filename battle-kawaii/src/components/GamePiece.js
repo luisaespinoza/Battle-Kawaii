@@ -19,9 +19,10 @@ export default function GamePiece(props) {
     return isValidMove
   }
   const swapPieces = () => {
-    console.log("here to indicate the drag action is ending. ")
+    console.log(grabbedPiece,dropTarget)
+    // console.log("here to indicate the drag action is ending. ")
     if(checkMoveValidity()) {
-      // props.
+      props.swapPieces(grabbedPiece.x)
     }
   }
 

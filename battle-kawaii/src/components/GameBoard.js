@@ -7,7 +7,7 @@ import { userState } from "../recoil/atoms"
 
 import AuthModel from "../models/AuthModel"
 import GamePiece from './GamePiece'
-import {puzzlePieces,legalMoveCandidates,createGameBoard,board,getRandomPiece,checkMatch, checkNextIn, checkMatches, randomizeBoard, checkBoardHasMoves } from '../Game'
+import '../Game'
 // const Game = require('')
 import './GameBoard.scss'
 
@@ -33,7 +33,10 @@ import './GameBoard.scss'
             width={rows.length}
             x={index1}
             y={index2}
+            swapPieces={swapPieces}
+            // updateBoard={function}
             />
+
             )
       })})
     }

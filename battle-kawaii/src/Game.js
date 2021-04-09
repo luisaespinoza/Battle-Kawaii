@@ -2,10 +2,19 @@
 // console.log("I live!") 
 export const puzzlePieces = ['red','green','blue','yellow']
 export const legalMoveCandidates = []
-export const playerInventory = {
-  blue: null,
-  green: null,
-  yellow: null,
+export const players={
+  playerHp: 20,
+  opponentHp: 20,
+  playerInventory: {
+    blue: null,
+    green: null,
+    yellow: null,
+  },
+  opponentInventory:{
+    blue: null,
+    green: null,
+    yellow: null,
+  },
 }
 export const playerHp = 20
 export const opponentHp = 20
@@ -181,7 +190,41 @@ export const checkBoardHasMoves = () => {
   return false
 }
 export const setInventory = (matchRange,matchColor) => {
-  playerInventory[`${matchColor}`] += matchRange
+  players.playerInventory[`${matchColor}`] += matchRange
+}
+export const replacePieces= (results,matchRange) => {
+  let x = results.start[0]
+  let y = results.start[1]
+  if(results.xHasMatches){
+    for(let i = 0 ; i < matchRange.length ; i++){
+        board[x+i][y] = null
+      }
+    for(let i = 0 ; i < matchRange.length ; i++){
+      let isMatching= true 
+      let matchesFound
+      while(isMatching){
+        board[x+i][y] = getRandomPiece()
+        matchesFound = checkMatches(x+i,y)
+        isMatching = matchesFound.hasMatches
+      } 
+    }
+  }
+  if(results.yHasMatches){
+    let y = results.start[1]
+    for(let i = 0 ; i < matchRange.length ; i++){
+      board[x][y+i] = null
+    }
+    for(let i = 0 ; i < matchRange.length ; i++){
+      let isMatching= true 
+      let matchesFound
+      while(isMatching){
+        board[x][y+i] = getRandomPiece()
+        matchesFound = checkMatches(x,y+i)
+        isMatching = matchesFound.hasMatches
+      } 
+    }
+
+  }
 }
 export const updateVitals = (results) => {
   if (results.xMatchRange >=3) {
@@ -190,7 +233,7 @@ export const updateVitals = (results) => {
     } else {
       updateHp(results.xMatchRange)
     }
-
+    replacePieces(results, results.xMatchRange)
   }
   if (results.yMatchRange >=3) {
     if(results.yMatchColor !=='red'){
@@ -198,25 +241,38 @@ export const updateVitals = (results) => {
     } else{
       updateHp(results.yMatchRange)
     }
+    replacePieces(results, results.yMatchRange)
   }
 }
-const updateHp = (matchRange) => {
+export const updateHp = (matchRange) => {
   let amount = -matchRange
-  setPlayerHp(amount,opponentHp)
+  setPlayerHp(amount,players.opponentHp)
 }
-const setPlayerHp = (amount, player) => {
+export const setPlayerHp = (amount, player) => {
   player += amount 
 }
-const replacePieces= (results) => {
-  for(let i = 0 ; i < results.length ; i++) {
-
+export const findCandidates = () =>{
+  legalMoveCandidates = []
+  let x = board.length
+  let y = board[0].length
+  for(let i = 0 ; i < x ; i++){
+    for( let j = 0; j < y ; j++){
+      let matchResults = checkMatches(i,j)
+      if (matchResults.isCandidate){
+        legalMoveCandidates.push(matchResults)
+      } 
+    }
   }
+
 }
-const updateGame= (results1,results2) => {
+export const updateGame= (results1,results2) => {
   updateVitals(results1)
   updateVitals(results2)
-
-
+  findCandidates()
+  if(!checkBoardHasMoves) {
+    legalMoveCandidates = []
+    randomizeBoard()
+  }
 }
 export const swapPieces = (x1,y1,x2,y2) =>{
   let firstPiece = board[x1][y1]
