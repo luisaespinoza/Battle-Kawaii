@@ -34,9 +34,11 @@ import AuthModel from "../models/AuthModel"
   return (
     <header>
       <div className="logo">
+      <img className='cloud' src="https://react-kawaii.vercel.app/57b7927ff69b4a4c52239da6edd24e3e.svg" alt=""/>
         <Link to={'/'}>Games!</Link>
       </div>
       <div className="links">
+        <img className='cloud' src="https://react-kawaii.vercel.app/57b7927ff69b4a4c52239da6edd24e3e.svg" alt=""/>
         <ul>
           { user ? (
             <>

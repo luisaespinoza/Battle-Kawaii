@@ -2,7 +2,13 @@
 // console.log("I live!") 
 export const puzzlePieces = ['red','green','blue','yellow']
 export const legalMoveCandidates = []
-
+export const playerInventory = {
+  blue: null,
+  green: null,
+  yellow: null,
+}
+export const playerHp = 20
+export const opponentHp = 20
 
 export const createGameBoard = (x, y) => {
   let board = []
@@ -174,20 +180,44 @@ export const checkBoardHasMoves = () => {
   }
   return false
 }
+export const setInventory = (matchRange,matchColor) => {
+  playerInventory[`${matchColor}`] += matchRange
+}
+export const updateVitals = (results) => {
+  if (results.xMatchRange >=3) {
+    if(results.xMatchColor !=='red'){
+      setInventory(results.xMatchRange,results.xMatchColor)
+    } else {
+      updateHp(results.xMatchRange)
+    }
+
+  }
+  if (results.yMatchRange >=3) {
+    if(results.yMatchColor !=='red'){
+      setInventory(results.yMatchRange, results.yMatchColor)
+    } else{
+      updateHp(results.yMatchRange)
+    }
+  }
+}
+const updateHp = (matchRange) => {
+  let amount = -matchRange
+  setPlayerHp(amount,opponentHp)
+}
+const setPlayerHp = (amount, player) => {
+  player += amount 
+}
+const replacePieces= (results) => {
+  for(let i = 0 ; i < results.length ; i++) {
+
+  }
+}
 const updateGame= (results1,results2) => {
-  if (results1.xMatchRange >=3) {
+  updateVitals(results1)
+  updateVitals(results2)
 
-  }
-  if (results1.yMatchRange >=3) {
 
-  }
-  if(results2.xMatchRange >=3 ){
-
-  }
-  if (results2.yMatchRange >=3 ) {
-
-  }
-
+}
 export const swapPieces = (x1,y1,x2,y2) =>{
   let firstPiece = board[x1][y1]
   let secondPiece = board[x2][y2]
