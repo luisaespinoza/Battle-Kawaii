@@ -25,7 +25,7 @@ export default function GamePiece(props) {
     // console.log("here to indicate the drag action is ending. ")
     if(checkMoveValidity(props)) {
       console.log("I'm a valid move!!! _+_+_+_+_+_+_+_+__+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_")
-      props.swapPieces(grabbedPiece.dataset.x,grabbedPiece.dataset.y,dropTarget.dataset.x,dropTarget.dataset.y)
+      props.swapPieces(parseInt(grabbedPiece.dataset.x),parseInt(grabbedPiece.dataset.y),parseInt(dropTarget.dataset.x),parseInt(dropTarget.dataset.y))
     }
     // console.log("board after:", board)
   }

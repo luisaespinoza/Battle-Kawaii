@@ -37,12 +37,15 @@ getRandomPiece = () => {
 
 checkMatch = (x1, y1, x2, y2) => {
   // is next piece on the this.board?
-  let isXInBounds = ( x2 < this.board.length && 0 <= x2 )
+  let board = this.board
+  // console.log(board,x1,y1,x2,y2)
+  let isXInBounds = ( x2 < board.length && 0 <= x2 )
   if(isXInBounds) {
-    let isYInBounds = ( y2 < this.board[x2].length && 0 <= y2 )
+    // console.log(board[x2])
+    let isYInBounds = ( y2 < board[x2].length && 0 <= y2 )
     if(isYInBounds) {
       // if so...
-      let isNextMatch = (this.board[x1][y1] === this.board[x2][y2])
+      let isNextMatch = (board[x1][y1] === board[x2][y2])
       return isNextMatch
     }
   }
@@ -53,6 +56,7 @@ checkMatch = (x1, y1, x2, y2) => {
 checkNextIn=(x , y, axis, direction) => {
   // 'c' is our constant incrementer/decrementer for the recursive callback chain
   const c = (direction === '+') ? 1 : -1
+  // console.log("OUR CONSTANT====", c,"our varabls are===========",x,y)
   // if the next tile on the axis matches: 
   // add direction constant to axis coordinate and check next in line
   // else return this value as the end of the series
@@ -96,9 +100,10 @@ checkMatches = (x, y) => {
 // '-' direction for start points |||| '+' direction for end points
   for(let j = 0; j <= 1 ; j++) {
     let axis = axes[j]
-    matchResults.start[j] = this.checkNextIn(x,y,axis,directions[0])
-    matchResults.end[j] = this.checkNextIn(x,y,axis,directions[1])
+    matchResults.start[j] = parseInt(this.checkNextIn(x,y,axis,directions[0]))
+    matchResults.end[j] = parseInt(this.checkNextIn(x,y,axis,directions[1]))
   } 
+  // console.log(matchResults.start,matchResults.end,"I'm logging the start  /and end results!!!!!!!!!!!!!!!!!!!!")
   // check length of series for each axis
   // dump into new array [x,y]
   let matchRanges = matchResults.end.map(function(coordinate,index){
@@ -108,8 +113,11 @@ checkMatches = (x, y) => {
   let xHasMatches = matchRanges[0] >= 3
   let yHasMatches = matchRanges[1] >= 3
   if (xHasMatches || yHasMatches){
-    matchResults.xMatchColor= xHasMatches ? matchResults.start[0] : null
-    matchResults.yMatchColor= yHasMatches ? matchResults.start[0] : null
+    console.log(matchResults)
+    let x = matchResults.start[0]
+    let y = matchResults.start[1]
+    matchResults.xMatchColor= xHasMatches ? this.board[x][y] : null
+    matchResults.yMatchColor= yHasMatches ? this.board[x][y] : null
     matchResults.hasMatches = true
   }
 
@@ -174,12 +182,12 @@ checkBoardHasMoves = () => {
     }
     else if (candidate.yMatchRange >= 2) {
       let toCheck = candidate.start[1] - 2
-      console.log("Checking...",xStart,yStart,xStart,toCheck,this.checkMatch(xStart,yStart,xStart,toCheck))
+      // console.log("Checking...",xStart,yStart,xStart,toCheck,this.checkMatch(xStart,yStart,xStart,toCheck))
       if (this.checkMatch(xStart,yStart,xStart,toCheck)) {
         return true
       }
       toCheck = candidate.end[1] + 2
-      console.log("Checking...",xEnd,yEnd,xEnd,toCheck,this.checkMatch(xEnd,yEnd,xEnd,toCheck))
+      // console.log("Checking...",xEnd,yEnd,xEnd,toCheck,this.checkMatch(xEnd,yEnd,xEnd,toCheck))
       if (this.checkMatch(xEnd,yEnd,xEnd, toCheck)) {
         return true
       }
@@ -193,29 +201,34 @@ setInventory = (matchRange,matchColor) => {
 replacePieces= (results,matchRange) => {
   let x = results.start[0]
   let y = results.start[1]
-  if(results.xHasMatches){
-    for(let i = 0 ; i < matchRange.length ; i++){
+  console.log('Im logging the match results objects for reference', results, matchRange )
+  if(results.xMatchRange>=3 ){
+    for(let i = 0 ; i < matchRange ; i++){
+      console.log("I'm nulling pieces out.=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
         this.board[x+i][y] = null
       }
-    for(let i = 0 ; i < matchRange.length ; i++){
+    for(let i = 0 ; i < matchRange ; i++){
       let isMatching= true 
       let matchesFound
       while(isMatching){
+        console.log("i'm rolling new pieces &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
         this.board[x+i][y] = this.getRandomPiece()
         matchesFound = this.checkMatches(x+i,y)
         isMatching = matchesFound.hasMatches
       } 
     }
   }
-  if(results.yHasMatches){
-    let y = results.start[1]
+  if(results.yMatchRange>=3){
+    // let y = results.start[1]
     for(let i = 0 ; i < matchRange.length ; i++){
+      console.log("I'm nulling pieces out.=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
       this.board[x][y+i] = null
     }
     for(let i = 0 ; i < matchRange.length ; i++){
       let isMatching= true 
       let matchesFound
       while(isMatching){
+        console.log("i'm rolling new pieces &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
         this.board[x][y+i] = this.getRandomPiece()
         matchesFound = this.checkMatches(x,y+i)
         isMatching = matchesFound.hasMatches
@@ -225,7 +238,8 @@ replacePieces= (results,matchRange) => {
   }
 }
 updateVitals = (results) => {
-  if (results.xMatchRange >=3) {
+  console.log(results,"results109238410928374091238740923174928375098347590834705721385349857")
+  if (results.xMatchRange >= 3) {
     if(results.xMatchColor !=='red'){
       this.setInventory(results.xMatchRange,results.xMatchColor)
     } else {
