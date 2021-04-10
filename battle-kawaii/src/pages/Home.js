@@ -13,7 +13,7 @@ export default class Home extends Component {
       <div>
         Home
         <div>
-          <button onClick={this.sendSocketIO}>Send Socket.io</button>
+          {/* <button onClick={this.sendSocketIO}>Send Socket.io</button> */}
         </div>
       </div>
     )

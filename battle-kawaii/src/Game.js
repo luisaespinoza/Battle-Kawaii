@@ -1,50 +1,48 @@
 
 // console.log("I live!") 
-export const puzzlePieces = ['red','green','blue','yellow']
-export const legalMoveCandidates = []
-export const players={
-  playerHp: 20,
-  opponentHp: 20,
-  playerInventory: {
-    blue: null,
-    green: null,
-    yellow: null,
-  },
-  opponentInventory:{
-    blue: null,
-    green: null,
-    yellow: null,
-  },
-}
-export const playerHp = 20
-export const opponentHp = 20
-
-export const createGameBoard = (x, y) => {
-  let board = []
-  for( let i = 0 ; i < x ; i++) {
-    board.push(new Array(y))
+export default class Game {
+  puzzlePieces = ['red','green','blue','yellow']
+  legalMoveCandidates = []
+  players= {
+    playerHp: 20,
+    opponentHp: 20,
+    playerInventory: {
+      blue: null,
+      green: null,
+      yellow: null,
+    },
+    opponentInventory:{
+      blue: null,
+      green: null,
+      yellow: null,
+    },
   }
-  return board
+  board
+  start = () => {
+    this.board = this.createGameBoard(6,6)
+    this.randomizeBoard()
+  }
+  createGameBoard = (x, y) => {
+    let board = []
+    for( let i = 0 ; i < x ; i++) {
+      board.push(new Array(y))
+    }
+    return board
+  }
+
+getRandomPiece = () => {
+  return this.puzzlePieces[Math.floor(Math.random()*this.puzzlePieces.length)]
 }
 
 
-export let board = createGameBoard(6,6)
-
-
-
-export const getRandomPiece = () => {
-  return puzzlePieces[Math.floor(Math.random()*puzzlePieces.length)]
-}
-
-
-export const checkMatch = (x1, y1, x2, y2) => {
-  // is next piece on the board?
-  let isXInBounds = ( x2 < board.length && 0 <= x2 )
+checkMatch = (x1, y1, x2, y2) => {
+  // is next piece on the this.board?
+  let isXInBounds = ( x2 < this.board.length && 0 <= x2 )
   if(isXInBounds) {
-    let isYInBounds = ( y2 < board[x2].length && 0 <= y2 )
+    let isYInBounds = ( y2 < this.board[x2].length && 0 <= y2 )
     if(isYInBounds) {
       // if so...
-      let isNextMatch = (board[x1][y1] === board[x2][y2])
+      let isNextMatch = (this.board[x1][y1] === this.board[x2][y2])
       return isNextMatch
     }
   }
@@ -52,26 +50,26 @@ export const checkMatch = (x1, y1, x2, y2) => {
 }
 
 
-export const checkNextIn=(x , y, axis, direction) => {
+checkNextIn=(x , y, axis, direction) => {
   // 'c' is our constant incrementer/decrementer for the recursive callback chain
   const c = (direction === '+') ? 1 : -1
   // if the next tile on the axis matches: 
   // add direction constant to axis coordinate and check next in line
   // else return this value as the end of the series
   if (axis === 'x') {
-    if(checkMatch(x, y, x + c, y)) {
+    if(this.checkMatch(x, y, x + c, y)) {
       let xNew = x + c
       // launch recursive callback for next in line
-      return checkNextIn(xNew,y,axis,direction)
+      return this.checkNextIn(xNew,y,axis,direction)
     } else {
       return x
     }
   }
   else {
-    if (checkMatch(x, y, x, y + c)) {
+    if (this.checkMatch(x, y, x, y + c)) {
       let yNew = y + c
       // launch recursive callback for next in line
-      return checkNextIn(x,yNew,axis,direction)
+      return this.checkNextIn(x,yNew,axis,direction)
     } else {
       return y
     }
@@ -79,7 +77,7 @@ export const checkNextIn=(x , y, axis, direction) => {
 }
 
 
-export const checkMatches = (x, y) => {
+checkMatches = (x, y) => {
   let matchResults = {
     hasMatches: false,
     start: [x,y],
@@ -98,8 +96,8 @@ export const checkMatches = (x, y) => {
 // '-' direction for start points |||| '+' direction for end points
   for(let j = 0; j <= 1 ; j++) {
     let axis = axes[j]
-    matchResults.start[j] = checkNextIn(x,y,axis,directions[0])
-    matchResults.end[j] = checkNextIn(x,y,axis,directions[1])
+    matchResults.start[j] = this.checkNextIn(x,y,axis,directions[0])
+    matchResults.end[j] = this.checkNextIn(x,y,axis,directions[1])
   } 
   // check length of series for each axis
   // dump into new array [x,y]
@@ -121,10 +119,10 @@ export const checkMatches = (x, y) => {
     matchResults.isCandidate = true
   }
   // update match ranges anyway. A series of 2 can be used as
-  // candidates to check if the board has legal moves?? Hmm...
+  // candidates to check if the this.board has legal moves?? Hmm...
   // Might need to create new propery called candidateForMatch
   // and store any that flag true into an array, 
-  // instead of checking the entire board. 
+  // instead of checking the entire this.board. 
   matchResults.xMatchRange = matchRanges[0]
   matchResults.yMatchRange = matchRanges[1]
   // returns object of results 
@@ -132,9 +130,9 @@ export const checkMatches = (x, y) => {
 }
 
 
-export const randomizeBoard = () => {
-  let x = board.length
-  let y = board[0].length
+randomizeBoard = () => {
+  let x = this.board.length
+  let y = this.board[0].length
   for(let i = 0 ; i < x ; i++){
     for( let j = 0; j < y ; j++){
       // generate a random piece in place until a piece 
@@ -142,69 +140,69 @@ export const randomizeBoard = () => {
       let isMatching = true
       let matchesFound
       while(isMatching) {
-        board[i][j] = getRandomPiece()
-        matchesFound = checkMatches(i,j)
+        this.board[i][j] = this.getRandomPiece()
+        matchesFound = this.checkMatches(i,j)
         isMatching = matchesFound.hasMatches
       }
       if(matchesFound.isCandidate) {
-        legalMoveCandidates.push(matchesFound)
+        this.legalMoveCandidates.push(matchesFound)
       }
       // succeeding, carry on to next tile
     }
   }
-  console.log(board)
+  console.log(this.board)
 }
 
-export const checkBoardHasMoves = () => {
-  for(let i = 0; i<=legalMoveCandidates.length; i++) {
-    let candidate = legalMoveCandidates[i]
+checkBoardHasMoves = () => {
+  for(let i = 0; i<=this.legalMoveCandidates.length; i++) {
+    let candidate = this.legalMoveCandidates[i]
     let xStart = candidate.start[0]
     let yStart = candidate.start[1]
     let xEnd = candidate.end[0]
     let yEnd = candidate.end[1]
     if (candidate.xMatchRange >= 2) {
       let toCheck = candidate.start[0] - 2
-      console.log("Checking...",xStart,yStart,toCheck,yStart,checkMatch(xStart,yStart,toCheck,yStart))
-      if (checkMatch(xStart,yStart,toCheck,yStart)) {
+      console.log("Checking...",xStart,yStart,toCheck,yStart,this.checkMatch(xStart,yStart,toCheck,yStart))
+      if (this.checkMatch(xStart,yStart,toCheck,yStart)) {
         return true
       }
       toCheck = candidate.end[0] + 2
-      console.log("Checking...",xEnd,yEnd,toCheck,yEnd,checkMatch(xEnd,yEnd,toCheck,yEnd))
-      if (checkMatch(xEnd,yEnd,toCheck, yEnd)) {
+      console.log("Checking...",xEnd,yEnd,toCheck,yEnd,this.checkMatch(xEnd,yEnd,toCheck,yEnd))
+      if (this.checkMatch(xEnd,yEnd,toCheck, yEnd)) {
         return true
       }
     }
     else if (candidate.yMatchRange >= 2) {
       let toCheck = candidate.start[1] - 2
-      console.log("Checking...",xStart,yStart,xStart,toCheck,checkMatch(xStart,yStart,xStart,toCheck))
-      if (checkMatch(xStart,yStart,xStart,toCheck)) {
+      console.log("Checking...",xStart,yStart,xStart,toCheck,this.checkMatch(xStart,yStart,xStart,toCheck))
+      if (this.checkMatch(xStart,yStart,xStart,toCheck)) {
         return true
       }
       toCheck = candidate.end[1] + 2
-      console.log("Checking...",xEnd,yEnd,xEnd,toCheck,checkMatch(xEnd,yEnd,xEnd,toCheck))
-      if (checkMatch(xEnd,yEnd,xEnd, toCheck)) {
+      console.log("Checking...",xEnd,yEnd,xEnd,toCheck,this.checkMatch(xEnd,yEnd,xEnd,toCheck))
+      if (this.checkMatch(xEnd,yEnd,xEnd, toCheck)) {
         return true
       }
     }
   }
   return false
 }
-export const setInventory = (matchRange,matchColor) => {
-  players.playerInventory[`${matchColor}`] += matchRange
+setInventory = (matchRange,matchColor) => {
+  this.players.playerInventory[`${matchColor}`] += matchRange
 }
-export const replacePieces= (results,matchRange) => {
+replacePieces= (results,matchRange) => {
   let x = results.start[0]
   let y = results.start[1]
   if(results.xHasMatches){
     for(let i = 0 ; i < matchRange.length ; i++){
-        board[x+i][y] = null
+        this.board[x+i][y] = null
       }
     for(let i = 0 ; i < matchRange.length ; i++){
       let isMatching= true 
       let matchesFound
       while(isMatching){
-        board[x+i][y] = getRandomPiece()
-        matchesFound = checkMatches(x+i,y)
+        this.board[x+i][y] = this.getRandomPiece()
+        matchesFound = this.checkMatches(x+i,y)
         isMatching = matchesFound.hasMatches
       } 
     }
@@ -212,74 +210,359 @@ export const replacePieces= (results,matchRange) => {
   if(results.yHasMatches){
     let y = results.start[1]
     for(let i = 0 ; i < matchRange.length ; i++){
-      board[x][y+i] = null
+      this.board[x][y+i] = null
     }
     for(let i = 0 ; i < matchRange.length ; i++){
       let isMatching= true 
       let matchesFound
       while(isMatching){
-        board[x][y+i] = getRandomPiece()
-        matchesFound = checkMatches(x,y+i)
+        this.board[x][y+i] = this.getRandomPiece()
+        matchesFound = this.checkMatches(x,y+i)
         isMatching = matchesFound.hasMatches
       } 
     }
 
   }
 }
-export const updateVitals = (results) => {
+updateVitals = (results) => {
   if (results.xMatchRange >=3) {
     if(results.xMatchColor !=='red'){
-      setInventory(results.xMatchRange,results.xMatchColor)
+      this.setInventory(results.xMatchRange,results.xMatchColor)
     } else {
-      updateHp(results.xMatchRange)
+      this.updateHp(results.xMatchRange)
     }
-    replacePieces(results, results.xMatchRange)
+    console.log("i'm recognizing match line.")
+    this.replacePieces(results, results.xMatchRange)
   }
   if (results.yMatchRange >=3) {
     if(results.yMatchColor !=='red'){
-      setInventory(results.yMatchRange, results.yMatchColor)
+      this.setInventory(results.yMatchRange, results.yMatchColor)
     } else{
-      updateHp(results.yMatchRange)
+      this.updateHp(results.yMatchRange)
     }
-    replacePieces(results, results.yMatchRange)
+    console.log('Im recognizing a match line')
+    this.replacePieces(results, results.yMatchRange)
   }
 }
-export const updateHp = (matchRange) => {
+updateHp = (matchRange) => {
   let amount = -matchRange
-  setPlayerHp(amount,players.opponentHp)
+  this.setPlayerHp(amount,this.players.opponentHp)
 }
-export const setPlayerHp = (amount, player) => {
+setPlayerHp = (amount, player) => {
   player += amount 
 }
-export const findCandidates = () =>{
-  legalMoveCandidates = []
-  let x = board.length
-  let y = board[0].length
+findCandidates = () =>{
+  this.legalMoveCandidates = []
+  let x = this.board.length
+  let y = this.board[0].length
   for(let i = 0 ; i < x ; i++){
     for( let j = 0; j < y ; j++){
-      let matchResults = checkMatches(i,j)
+      let matchResults = this.checkMatches(i,j)
       if (matchResults.isCandidate){
-        legalMoveCandidates.push(matchResults)
+        this.legalMoveCandidates.push(matchResults)
       } 
     }
   }
 
 }
-export const updateGame= (results1,results2) => {
-  updateVitals(results1)
-  updateVitals(results2)
-  findCandidates()
-  if(!checkBoardHasMoves) {
-    legalMoveCandidates = []
-    randomizeBoard()
+updateGame= (results1,results2) => {
+  this.updateVitals(results1)
+  this.updateVitals(results2)
+  this.findCandidates()
+  if(!this.checkBoardHasMoves()) {
+    this.legalMoveCandidates = []
+    this.randomizeBoard()
   }
 }
-export const swapPieces = (x1,y1,x2,y2) =>{
-  let firstPiece = board[x1][y1]
-  let secondPiece = board[x2][y2]
-  board[x1][y1] = secondPiece
-  board[x2][y2] = firstPiece
-  let results1 = checkMatches(x1,y1)
-  let results2 = checkMatches(x2,y2)
-  updateGame(results1,results2)
+swapPieces = (x1,y1,x2,y2) =>{
+  console.log("game before:", this.board)
+  let firstPiece = this.board[x1][y1]
+  let secondPiece = this.board[x2][y2]
+  this.board[x1][y1] = secondPiece
+  this.board[x2][y2] = firstPiece
+  let results1 = this.checkMatches(x1,y1)
+  let results2 = this.checkMatches(x2,y2)
+  this.updateGame(results1,results2)
+  console.log("game after:", this.board)
 }
+}
+// export const puzzlePieces = ['red','green','blue','yellow']
+// export const this.legalMoveCandidates = []
+// export const players={
+//   playerHp: 20,
+//   opponentHp: 20,
+//   playerInventory: {
+//     blue: null,
+//     green: null,
+//     yellow: null,
+//   },
+//   opponentInventory:{
+//     blue: null,
+//     green: null,
+//     yellow: null,
+//   },}
+
+// export const createGameBoard = (x, y) => {
+//   let this.board = []
+//   for( let i = 0 ; i < x ; i++) {
+//     this.board.push(new Array(y))
+//   }
+//   return this.board
+// }
+
+
+// export let this.board = createGameBoard(6,6)
+
+
+
+// export const getRandomPiece = () => {
+//   return puzzlePieces[Math.floor(Math.random()*puzzlePieces.length)]
+// }
+
+
+// export const checkMatch = (x1, y1, x2, y2) => {
+//   // is next piece on the this.board?
+//   let isXInBounds = ( x2 < this.board.length && 0 <= x2 )
+//   if(isXInBounds) {
+//     let isYInBounds = ( y2 < this.board[x2].length && 0 <= y2 )
+//     if(isYInBounds) {
+//       // if so...
+//       let isNextMatch = (this.board[x1][y1] === this.board[x2][y2])
+//       return isNextMatch
+//     }
+//   }
+//   return false
+// }
+
+
+// export const checkNextIn=(x , y, axis, direction) => {
+//   // 'c' is our constant incrementer/decrementer for the recursive callback chain
+//   const c = (direction === '+') ? 1 : -1
+//   // if the next tile on the axis matches: 
+//   // add direction constant to axis coordinate and check next in line
+//   // else return this value as the end of the series
+//   if (axis === 'x') {
+//     if(checkMatch(x, y, x + c, y)) {
+//       let xNew = x + c
+//       // launch recursive callback for next in line
+//       return checkNextIn(xNew,y,axis,direction)
+//     } else {
+//       return x
+//     }
+//   }
+//   else {
+//     if (checkMatch(x, y, x, y + c)) {
+//       let yNew = y + c
+//       // launch recursive callback for next in line
+//       return checkNextIn(x,yNew,axis,direction)
+//     } else {
+//       return y
+//     }
+//   }
+// }
+
+
+// export const checkMatches = (x, y) => {
+//   let matchResults = {
+//     hasMatches: false,
+//     start: [x,y],
+//     end:[x,y],
+//     xMatchRange:null,
+//     yMatchRange:null,
+//     xMatchColor:null,
+//     yMatchColor:null,
+//     isCandidate: false
+//   } 
+
+//   const axes = ['x','y']
+//   const directions = ['-','+']
+
+// // check each axis and direction for matches 
+// // '-' direction for start points |||| '+' direction for end points
+//   for(let j = 0; j <= 1 ; j++) {
+//     let axis = axes[j]
+//     matchResults.start[j] = checkNextIn(x,y,axis,directions[0])
+//     matchResults.end[j] = checkNextIn(x,y,axis,directions[1])
+//   } 
+//   // check length of series for each axis
+//   // dump into new array [x,y]
+//   let matchRanges = matchResults.end.map(function(coordinate,index){
+//     return coordinate - matchResults.start[index] + 1
+//   })
+//   // check if there are any series of matches 3 or greater
+//   let xHasMatches = matchRanges[0] >= 3
+//   let yHasMatches = matchRanges[1] >= 3
+//   if (xHasMatches || yHasMatches){
+//     matchResults.xMatchColor= xHasMatches ? matchResults.start[0] : null
+//     matchResults.yMatchColor= yHasMatches ? matchResults.start[0] : null
+//     matchResults.hasMatches = true
+//   }
+
+//   xHasMatches = matchRanges[0] >= 2
+//   yHasMatches = matchRanges[1] >= 2
+//   if (xHasMatches || yHasMatches){
+//     matchResults.isCandidate = true
+//   }
+//   // update match ranges anyway. A series of 2 can be used as
+//   // candidates to check if the this.board has legal moves?? Hmm...
+//   // Might need to create new propery called candidateForMatch
+//   // and store any that flag true into an array, 
+//   // instead of checking the entire this.board. 
+//   matchResults.xMatchRange = matchRanges[0]
+//   matchResults.yMatchRange = matchRanges[1]
+//   // returns object of results 
+//   return matchResults
+// }
+
+
+// export const randomizeBoard = () => {
+//   let x = this.board.length
+//   let y = this.board[0].length
+//   for(let i = 0 ; i < x ; i++){
+//     for( let j = 0; j < y ; j++){
+//       // generate a random piece in place until a piece 
+//       // that doesn't create a 3 series is generated.
+//       let isMatching = true
+//       let matchesFound
+//       while(isMatching) {
+//         this.board[i][j] = getRandomPiece()
+//         matchesFound = checkMatches(i,j)
+//         isMatching = matchesFound.hasMatches
+//       }
+//       if(matchesFound.isCandidate) {
+//         this.legalMoveCandidates.push(matchesFound)
+//       }
+//       // succeeding, carry on to next tile
+//     }
+//   }
+//   console.log(this.board)
+// }
+
+// export const checkBoardHasMoves = () => {
+//   for(let i = 0; i<=this.legalMoveCandidates.length; i++) {
+//     let candidate = this.legalMoveCandidates[i]
+//     let xStart = candidate.start[0]
+//     let yStart = candidate.start[1]
+//     let xEnd = candidate.end[0]
+//     let yEnd = candidate.end[1]
+//     if (candidate.xMatchRange >= 2) {
+//       let toCheck = candidate.start[0] - 2
+//       console.log("Checking...",xStart,yStart,toCheck,yStart,checkMatch(xStart,yStart,toCheck,yStart))
+//       if (checkMatch(xStart,yStart,toCheck,yStart)) {
+//         return true
+//       }
+//       toCheck = candidate.end[0] + 2
+//       console.log("Checking...",xEnd,yEnd,toCheck,yEnd,checkMatch(xEnd,yEnd,toCheck,yEnd))
+//       if (checkMatch(xEnd,yEnd,toCheck, yEnd)) {
+//         return true
+//       }
+//     }
+//     else if (candidate.yMatchRange >= 2) {
+//       let toCheck = candidate.start[1] - 2
+//       console.log("Checking...",xStart,yStart,xStart,toCheck,checkMatch(xStart,yStart,xStart,toCheck))
+//       if (checkMatch(xStart,yStart,xStart,toCheck)) {
+//         return true
+//       }
+//       toCheck = candidate.end[1] + 2
+//       console.log("Checking...",xEnd,yEnd,xEnd,toCheck,checkMatch(xEnd,yEnd,xEnd,toCheck))
+//       if (checkMatch(xEnd,yEnd,xEnd, toCheck)) {
+//         return true
+//       }
+//     }
+//   }
+//   return false
+// }
+// export const setInventory = (matchRange,matchColor) => {
+//   players.playerInventory[`${matchColor}`] += matchRange
+// }
+// export const replacePieces= (results,matchRange) => {
+//   let x = results.start[0]
+//   let y = results.start[1]
+//   if(results.xHasMatches){
+//     for(let i = 0 ; i < matchRange.length ; i++){
+//         this.board[x+i][y] = null
+//       }
+//     for(let i = 0 ; i < matchRange.length ; i++){
+//       let isMatching= true 
+//       let matchesFound
+//       while(isMatching){
+//         this.board[x+i][y] = getRandomPiece()
+//         matchesFound = checkMatches(x+i,y)
+//         isMatching = matchesFound.hasMatches
+//       } 
+//     }
+//   }
+//   if(results.yHasMatches){
+//     let y = results.start[1]
+//     for(let i = 0 ; i < matchRange.length ; i++){
+//       this.board[x][y+i] = null
+//     }
+//     for(let i = 0 ; i < matchRange.length ; i++){
+//       let isMatching= true 
+//       let matchesFound
+//       while(isMatching){
+//         this.board[x][y+i] = getRandomPiece()
+//         matchesFound = checkMatches(x,y+i)
+//         isMatching = matchesFound.hasMatches
+//       } 
+//     }
+
+//   }
+// }
+// export const updateVitals = (results) => {
+//   if (results.xMatchRange >=3) {
+//     if(results.xMatchColor !=='red'){
+//       setInventory(results.xMatchRange,results.xMatchColor)
+//     } else {
+//       updateHp(results.xMatchRange)
+//     }
+//     replacePieces(results, results.xMatchRange)
+//   }
+//   if (results.yMatchRange >=3) {
+//     if(results.yMatchColor !=='red'){
+//       setInventory(results.yMatchRange, results.yMatchColor)
+//     } else{
+//       updateHp(results.yMatchRange)
+//     }
+//     replacePieces(results, results.yMatchRange)
+//   }
+// }
+// export const updateHp = (matchRange) => {
+//   let amount = -matchRange
+//   setPlayerHp(amount,players.opponentHp)
+// }
+// export const setPlayerHp = (amount, player) => {
+//   player += amount 
+// }
+// export const findCandidates = () =>{
+//   this.legalMoveCandidates = []
+//   let x = this.board.length
+//   let y = this.board[0].length
+//   for(let i = 0 ; i < x ; i++){
+//     for( let j = 0; j < y ; j++){
+//       let matchResults = checkMatches(i,j)
+//       if (matchResults.isCandidate){
+//         this.legalMoveCandidates.push(matchResults)
+//       } 
+//     }
+//   }
+
+// }
+// export const updateGame= (results1,results2) => {
+//   updateVitals(results1)
+//   updateVitals(results2)
+//   findCandidates()
+//   if(!checkBoardHasMoves) {
+//     this.legalMoveCandidates = []
+//     randomizeBoard()
+//   }
+// }
+// export const swapPieces = (x1,y1,x2,y2) =>{
+//   let firstPiece = this.board[x1][y1]
+//   let secondPiece = this.board[x2][y2]
+//   this.board[x1][y1] = secondPiece
+//   this.board[x2][y2] = firstPiece
+//   let results1 = checkMatches(x1,y1)
+//   let results2 = checkMatches(x2,y2)
+//   updateGame(results1,results2)
+// }
