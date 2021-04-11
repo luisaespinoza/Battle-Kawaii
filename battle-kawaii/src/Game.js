@@ -19,6 +19,7 @@ export default class Game {
   }
   board
   start = () => {
+    console.log("HEYHEYHEY I'm a new instance of the game!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     this.board = this.createGameBoard(6,6)
     this.randomizeBoard()
   }
@@ -202,43 +203,72 @@ setInventory = (matchRange,matchColor) => {
   this.players.playerInventory[`${matchColor}`] += matchRange
 }
 replacePieces= (results,matchRange) => {
+  console.log(results.xMatchRange,results.yMatchRange,"{+}{+}{+}{+}{+}}+{}+{}+{}+{}+{+}{+}+}{+}")
   let x = results.start[0]
   let y = results.start[1]
+  // let xRangeUpdated = false
+  // let yRangeUpdated = false
   console.log('Im logging the match results objects for reference', results, matchRange )
   if(results.xMatchRange>=3 ){
     for(let i = 0 ; i < matchRange ; i++){
-      console.log("I'm nulling pieces out.=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
-        this.board[x+i][y] = null
+      // console.log("I'm nulling pieces out.=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
+      this.board[x+i][y] = null
+      for( let candidate in this.legalMoveCandidates){
+        if(candidate.start===[x+i,y] || candidate.end===[x+i,y]){
+          let index = this.legalMoveCandidates.indexOf(candidate)
+          this.legalMoveCandidates.splice(index,1)
+        }
+      }
       }
     for(let i = 0 ; i < matchRange ; i++){
       let isMatching= true 
       let matchesFound
       while(isMatching){
-        console.log("i'm rolling new pieces &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        // console.log("i'm rolling new pieces &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
         this.board[x+i][y] = this.getRandomPiece()
         matchesFound = this.checkMatches(x+i,y)
         isMatching = matchesFound.hasMatches
       } 
+      if(matchesFound.isCandidate){
+        this.legalMoveCandidates.push(matchesFound)
+      }
     }
+    // xRangeUpdated=true
   }
   if(results.yMatchRange>=3){
     // let y = results.start[1]
     for(let i = 0 ; i < matchRange ; i++){
-      console.log("I'm nulling pieces out.=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
+      // console.log("I'm nulling pieces out.=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
       this.board[x][y+i] = null
+      for( let candidate in this.legalMoveCandidates){
+        if(candidate.start===[x,y+i] || candidate.end===[x,y+i]){
+          let index = this.legalMoveCandidates.indexOf(candidate)
+          this.legalMoveCandidates.splice(index,1)
+        }
+      }
     }
     for(let i = 0 ; i < matchRange ; i++){
       let isMatching= true 
       let matchesFound
       while(isMatching){
-        console.log("i'm rolling new pieces &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        // console.log("i'm rolling new pieces &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
         this.board[x][y+i] = this.getRandomPiece()
         matchesFound = this.checkMatches(x,y+i)
         isMatching = matchesFound.hasMatches
+      }
+      if(matchesFound.isCandidate){
+        this.legalMoveCandidates.push(matchesFound)
       } 
     }
-
+    // yRangeUpdated=true
   }
+  console.log(this.legalMoveCandidates,"all current candidates")
+  // if(xRangeUpdated){
+  //   this.findCandidates(results.start,results.end)
+  // }
+  // if(yRangeUpdated){
+  //   this.findCandidates(restuls.start,results.end)
+  // }
 }
 updateVitals = (results) => {
   console.log(results,"results109238410928374091238740923174928375098347590834705721385349857")
@@ -268,40 +298,34 @@ updateHp = (matchRange) => {
 setPlayerHp = (amount, player) => {
   player += amount 
 }
-findCandidates = () =>{
-  this.legalMoveCandidates = []
-  let x = this.board.length
-  let y = this.board[0].length
-  for(let i = 0 ; i < x ; i++){
-    for( let j = 0; j < y ; j++){
-      let matchResults = this.checkMatches(i,j)
-      if (matchResults.isCandidate){
-        this.legalMoveCandidates.push(matchResults)
-      } 
-    }
-  }
-
-}
+// findCandidates = (start,end) =>{
+//   for(let i = 0; i <)
+//   this.checkMatches
+// }
 updateGame= (results1,results2) => {
   this.updateVitals(results1)
   this.updateVitals(results2)
-  this.findCandidates()
-  if(!this.checkBoardHasMoves()) {
-    this.legalMoveCandidates = []
-    this.randomizeBoard()
-  }
+  // if(!this.checkBoardHasMoves()) {
+  //   this.legalMoveCandidates = []
+  //   this.randomizeBoard()
+  // }
 }
 swapPieces = (x1,y1,x2,y2) =>{
   console.log("game before:", this.board)
   let firstPiece = this.board[x1][y1]
   let secondPiece = this.board[x2][y2]
+  // console.log("before",this.board[x1][y1],this.board[x2][y2])
   this.board[x1][y1] = secondPiece
   this.board[x2][y2] = firstPiece
+  // console.log("after",this.board[x1][y1],this.board[x2][y2])
   let results1 = this.checkMatches(x1,y1)
   let results2 = this.checkMatches(x2,y2)
+  console.log("results of  first moved piece", results1)
+  console.log("results of second moved piece",results2)
   this.updateGame(results1,results2)
   console.log("game after:", this.board)
 }
+this.start()
 }
 // export const puzzlePieces = ['red','green','blue','yellow']
 // export const this.legalMoveCandidates = []

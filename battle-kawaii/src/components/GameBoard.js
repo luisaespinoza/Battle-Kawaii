@@ -19,51 +19,54 @@ import './GameBoard.scss'
       blue: '#5593ff',
       yellow: '#ffff00'
     }
-    const game = new Game()
-    game.start()
-    let board = game.board
-    const [gameState, setGameState] = useState(cloneDeep(game.board))
+    const game = useRef(new Game())
+    // let board = game.board
+    // const [gameState, setGameState] = useState(new Game() )
+    // setGameState(gameState.start())
+    const [boardState, setBoardState] = useState(cloneDeep(game.current.board))
     const [globalMood,setGlobalMood] = useState('ko')
     // const [turnState,setTurnState] = useState(0)
     // let   [,setState] = useState()
-    let pieces = generatePieces(gameState)
-    // const[boardState,setBoardState] = useState(generatePieces(gameState))
+    console.log(boardState)
+    let pieces = generatePieces(boardState)
+    // const[boardState,setBoardState] = useState(generatePieces(boardState))
     // const [mood, setmood ] = useState('happy')
     // setGameState(board)
-    console.log(board)
-    const reassignColors = () =>{
-      "I'm reassigning colors?!?!?!?!?!?!?!?!?!!????????????!?!?!?!?!?!?!?!?!??"
-      let temp =  generatePieces(gameState)
-      console.log(pieces)
-      for(let i = 0 ; i < pieces.length; i++ ){
-        for(let j = 0; j < pieces[i].length; j++) {
-          console.log(pieces[i][j].props.colorName)
-          if(pieces[i][j].props.colorName!==temp[i][j].props.colorName){
-            pieces[i][j] = {...temp[i][j]}
-            console.log(pieces[i][j],temp[i][j],"a side by side comparison!!!!!!!!!!!!!!!!!!!")
-          }
-        }
-      }
-    }
+    // console.log(board)
+    // const reassignColors = () =>{
+    //   "I'm reassigning colors?!?!?!?!?!?!?!?!?!!????????????!?!?!?!?!?!?!?!?!??"
+    //   let temp =  generatePieces(boardState)
+    //   console.log(pieces)
+    //   for(let i = 0 ; i < pieces.length; i++ ){
+    //     for(let j = 0; j < pieces[i].length; j++) {
+    //       console.log(pieces[i][j].props.colorName)
+    //       if(pieces[i][j].props.colorName!==temp[i][j].props.colorName){
+    //         pieces[i][j] = {...temp[i][j]}
+    //         console.log(pieces[i][j],temp[i][j],"a side by side comparison!!!!!!!!!!!!!!!!!!!")
+    //       }
+    //     }
+    //   }
+    // }
     function updateBoard() {
-      console.log(board)
-      // pieces = generatePieces(gameState.board)
-      console.log('previous state',game.board)
+      // console.log(game.board)
+      // pieces = generatePieces(boardState.board)
+      console.log('previous state',game.current.board)
       // setTurnState(turnState+1)
-      let clone = cloneDeep(game.board)
-      setGameState(clone)
+      let clone = cloneDeep(game.current.board)
+      setBoardState(clone)
+      console.log("new state",game.current.board)
+
       // if(globalMood!=='sad'){
       //   setGlobalMood('sad')
       // } else {
       //   setGlobalMood('blissful')
       // }
 
-      // setBoardState(generatePieces(gameState))
+      // setBoardState(generatePieces(boardState))
       // setGameState(game)
-      reassignColors()
-      console.log("new state",gameState)
+      // reassignColors()
     }
-    console.log(gameState)
+    console.log(boardState)
     function generatePieces(board) {
       // console.log(board)
       return board.map((rows, index1) => 
@@ -72,15 +75,15 @@ import './GameBoard.scss'
             <GamePiece
             key={index1*6 +index2}
             size={56}
-            colorName={gameState[index1][index2]}
-            color={gameState[index1][index2]}
+            colorName={boardState[index1][index2]}
+            color={boardState[index1][index2]}
             mood={globalMood}
             setMood={setGlobalMood}
             id={index1*6 + index2}
             width={rows.length}
             x={index1}
             y={index2}
-            swapPieces={game.swapPieces}
+            swapPieces={game.current.swapPieces}
             updateBoard={updateBoard}
             // turn={turnState}
             />
@@ -102,7 +105,7 @@ import './GameBoard.scss'
       //       width={board[0].length}
       //       x={i}
       //       y={j}
-      //       swapPieces={gameState.swapPieces}
+      //       swapPieces={boardState.swapPieces}
       //       updateBoard={updateBoard}
       //       />
       //       )
@@ -129,8 +132,8 @@ import './GameBoard.scss'
     //   })
       return(
         <div className="board grid">
-          {/* {gameState} */}
-        { gameState.length ? pieces : "Loading..."}
+          {/* {boardState} */}
+        { boardState.length ? pieces : "Loading..."}
         {/* {gameBoard} */}
         </div>
 ) 

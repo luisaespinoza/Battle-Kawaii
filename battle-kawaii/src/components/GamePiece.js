@@ -46,23 +46,23 @@ export default function GamePiece(props) {
   function clickHandler(e, props){
     console.log(props)
     // e.stopImmediatePropagation()
-    counter += 1
-    console.log(counter)
-    console.log(grabbedPiece,dropTarget)
+    // counter += 1
+    // console.log(counter)
+    // console.log(grabbedPiece,dropTarget)
     // console.log(e.currentTarget)
     if(e.currentTarget.className==='piece') {
       if(firstClick) {
         firstClick = !firstClick
-        console.log("first click= ", firstClick)
+        // console.log("first click= ", firstClick)
         grabbedPiece= e.currentTarget
-        console.log("this is the grabbedPiece",grabbedPiece)
+        // console.log("this is the grabbedPiece",grabbedPiece)
         grabbedPiece.style.background='yellow'
         // grabbedPiece.style.borderWidth ='4px'
       } else if(!firstClick){
-        console.log("secondClick")
+        // console.log("secondClick")
         firstClick=!firstClick
         dropTarget = e.currentTarget
-        console.log("this is the droptarget", dropTarget)
+        // console.log("this is the droptarget", dropTarget)
         swapPieces(props)
         grabbedPiece.style.background = ""
         grabbedPiece=null
