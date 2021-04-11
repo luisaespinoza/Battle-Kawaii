@@ -56,7 +56,6 @@ checkMatch = (x1, y1, x2, y2) => {
 checkNextIn=(x , y, axis, direction) => {
   // 'c' is our constant incrementer/decrementer for the recursive callback chain
   const c = (direction === '+') ? 1 : -1
-  // console.log("OUR CONSTANT====", c,"our varabls are===========",x,y)
   // if the next tile on the axis matches: 
   // add direction constant to axis coordinate and check next in line
   // else return this value as the end of the series
@@ -162,34 +161,38 @@ randomizeBoard = () => {
 }
 
 checkBoardHasMoves = () => {
-  for(let i = 0; i<=this.legalMoveCandidates.length; i++) {
-    let candidate = this.legalMoveCandidates[i]
-    let xStart = candidate.start[0]
-    let yStart = candidate.start[1]
-    let xEnd = candidate.end[0]
-    let yEnd = candidate.end[1]
-    if (candidate.xMatchRange >= 2) {
-      let toCheck = candidate.start[0] - 2
-      console.log("Checking...",xStart,yStart,toCheck,yStart,this.checkMatch(xStart,yStart,toCheck,yStart))
-      if (this.checkMatch(xStart,yStart,toCheck,yStart)) {
-        return true
+  if(this.legalMoveCandidates.length){
+
+    for(let i = 0; i<=this.legalMoveCandidates.length; i++) {
+      let candidate = this.legalMoveCandidates[i]
+      console.log(candidate)
+      let xStart = candidate.start[0]
+      let yStart = candidate.start[1]
+      let xEnd = candidate.end[0]
+      let yEnd = candidate.end[1]
+      if (candidate.xMatchRange >= 2) {
+        let toCheck = candidate.start[0] - 2
+        console.log("Checking...",xStart,yStart,toCheck,yStart,this.checkMatch(xStart,yStart,toCheck,yStart))
+        if (this.checkMatch(xStart,yStart,toCheck,yStart)) {
+          return true
+        }
+        toCheck = candidate.end[0] + 2
+        console.log("Checking...",xEnd,yEnd,toCheck,yEnd,this.checkMatch(xEnd,yEnd,toCheck,yEnd))
+        if (this.checkMatch(xEnd,yEnd,toCheck, yEnd)) {
+          return true
+        }
       }
-      toCheck = candidate.end[0] + 2
-      console.log("Checking...",xEnd,yEnd,toCheck,yEnd,this.checkMatch(xEnd,yEnd,toCheck,yEnd))
-      if (this.checkMatch(xEnd,yEnd,toCheck, yEnd)) {
-        return true
-      }
-    }
-    else if (candidate.yMatchRange >= 2) {
-      let toCheck = candidate.start[1] - 2
-      // console.log("Checking...",xStart,yStart,xStart,toCheck,this.checkMatch(xStart,yStart,xStart,toCheck))
-      if (this.checkMatch(xStart,yStart,xStart,toCheck)) {
-        return true
-      }
-      toCheck = candidate.end[1] + 2
-      // console.log("Checking...",xEnd,yEnd,xEnd,toCheck,this.checkMatch(xEnd,yEnd,xEnd,toCheck))
-      if (this.checkMatch(xEnd,yEnd,xEnd, toCheck)) {
-        return true
+      else if (candidate.yMatchRange >= 2) {
+        let toCheck = candidate.start[1] - 2
+        // console.log("Checking...",xStart,yStart,xStart,toCheck,this.checkMatch(xStart,yStart,xStart,toCheck))
+        if (this.checkMatch(xStart,yStart,xStart,toCheck)) {
+          return true
+        }
+        toCheck = candidate.end[1] + 2
+        // console.log("Checking...",xEnd,yEnd,xEnd,toCheck,this.checkMatch(xEnd,yEnd,xEnd,toCheck))
+        if (this.checkMatch(xEnd,yEnd,xEnd, toCheck)) {
+          return true
+        }
       }
     }
   }
@@ -220,11 +223,11 @@ replacePieces= (results,matchRange) => {
   }
   if(results.yMatchRange>=3){
     // let y = results.start[1]
-    for(let i = 0 ; i < matchRange.length ; i++){
+    for(let i = 0 ; i < matchRange ; i++){
       console.log("I'm nulling pieces out.=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-")
       this.board[x][y+i] = null
     }
-    for(let i = 0 ; i < matchRange.length ; i++){
+    for(let i = 0 ; i < matchRange ; i++){
       let isMatching= true 
       let matchesFound
       while(isMatching){

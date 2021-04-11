@@ -8,6 +8,13 @@ export let counter = 0
 export default function GamePiece(props) {
   // console.log(props,"aslkdjfalksdjflkasjdflkajdlkfjaskldfj")
   const [mood,setMood] = useState('happy')
+  const [color,setColor] = useState(props.color)
+  const colors = {
+      green: '#45ff67',
+      red: '#ff4567',
+      blue: '#5593ff',
+      yellow: '#ffff00'
+    }
   let timer = null
   
   const checkMoveValidity = (props) => {
@@ -60,7 +67,9 @@ export default function GamePiece(props) {
         grabbedPiece.style.background = ""
         grabbedPiece=null
         dropTarget=null
+        setMood(props.mood)
         props.updateBoard()
+        // setColor(props.color)
     } else{
       firstClick=true
       grabbedPiece.style.background=""
@@ -92,7 +101,7 @@ export default function GamePiece(props) {
     onMouseEnter={mouseEnterMood} 
     onMouseLeave={mouseLeaveMood}
     >
-      <Planet size={props.size} mood={mood} color={props.color}/>
+      <Planet size={props.size} mood={mood} color={colors[`${props.color}`]}/>
     </div>
   )
 }
