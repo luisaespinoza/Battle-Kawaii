@@ -1,6 +1,6 @@
 import React, {useEffect,useState,useRef,useMemo,cloneAndUpdate} from 'react';
 import {cloneDeep} from "lodash"
-import { Link } from 'react-router-dom'
+import { Prompt} from 'react-router-dom'
 // import useRecoilState hook
 import { useRecoilState } from "recoil"
 // importing the atom that controls global state
@@ -12,14 +12,25 @@ import Game from '../Game'
 // const Game = require('')
 import './GameBoard.scss'
 
-  const GameBoard = () => {
+  const GameBoard = (props) => {
     const colors = {
       green: '#45ff67',
       red: '#ff4567',
       blue: '#5593ff',
       yellow: '#ffff00'
     }
+    const shouldBlockNavigation=true
     const game = useRef(new Game())
+    const gameHandler= () =>{
+      if(props.loadGame){
+        // initialize game to previous state
+      }
+      if(!game.current.board){
+        game.current.start()
+      } 
+    }
+    gameHandler()
+    // game.current.start()
     // let board = game.board
     // const [gameState, setGameState] = useState(new Game() )
     // setGameState(gameState.start())
@@ -27,6 +38,7 @@ import './GameBoard.scss'
     const [globalMood,setGlobalMood] = useState('ko')
     // const [turnState,setTurnState] = useState(0)
     // let   [,setState] = useState()
+    console.log(game.current)
     console.log(boardState)
     let pieces = generatePieces(boardState)
     // const[boardState,setBoardState] = useState(generatePieces(boardState))
@@ -65,6 +77,14 @@ import './GameBoard.scss'
       // setBoardState(generatePieces(boardState))
       // setGameState(game)
       // reassignColors()
+    }
+    function saveGame(e,props) {
+      console.log(game.current)
+      e.preventDefault()
+      props.handleSubmit(e,game.current)
+      // console.log(game)
+
+      // prevent default on form 
     }
     console.log(boardState)
     function generatePieces(board) {
@@ -130,12 +150,22 @@ import './GameBoard.scss'
     //     </>
     //     );
     //   })
+    
       return(
+        <>
+        <form action="POST">
+        <button className="saveGame" onClick={(e) => {saveGame(e,props)}}>SaveGame</button>
+        </form>
         <div className="board grid">
           {/* {boardState} */}
         { boardState.length ? pieces : "Loading..."}
+        <Prompt
+        when={shouldBlockNavigation}
+        message='You have unsaved changes, are you sure you want to leave?'
+        />
         {/* {gameBoard} */}
         </div>
+        </>
 ) 
 }
 

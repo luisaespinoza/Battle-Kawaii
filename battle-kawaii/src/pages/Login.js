@@ -17,7 +17,7 @@ function Login(props) {
       localStorage.setItem("uid", json.signedJwt);
       AuthModel.verify().then(data => {
         setUser(data.user);
-        props.history.push("/games");
+        props.history.push("/games/2");
       });
     });
   }

@@ -19,7 +19,7 @@ class AuthModel {
 
   // log in a new user
   static login = (data) => {
-    console.log('I am logging in !!!!!!!!!!!!!!!!!!!!!!!!!',data)
+    // console.log('I am logging in !!!!!!!!!!!!!!!!!!!!!!!!!',data)
     return fetch(`${URL}/auth/login`, {
       method: "POST",
       headers: {
@@ -27,7 +27,7 @@ class AuthModel {
       },
       body: JSON.stringify(data)
     }).then((response) => {
-      console.log(response, "++++++++++++++++++++++++")
+      // console.log(response, "++++++++++++++++++++++++")
       return response.json()
   })}
 
@@ -38,7 +38,7 @@ class AuthModel {
       // send the token in the authorization header
       headers: { authorization: `Bearer ${ localStorage.uid }` }
     }).then((response) => {
-      console.log(response, "%^&*&^%^&*%&^%*&^%*&^%&*^%&^%*&^%*&^%^&%*&^%*&^%*&^%*&^%*&^%*&^%*&^%")
+      // console.log(response, "%^&*&^%^&*%&^%*&^%*&^%&*^%&^%*&^%*&^%^&%*&^%*&^%*&^%*&^%*&^%*&^%*&^%")
       return response.json()
   })}
 }

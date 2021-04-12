@@ -1,61 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import GameModel from '../models/Game'
-
+import AuthModel from '../models/AuthModel'
+import GameBoard from '../components/GameBoard'
+import { userState } from "../recoil/atoms";
+import { useRecoilState } from "recoil";
 function NewGame(props) {
-  const [title, setTitle] = useState("");
-  const [publisher, setPublisher] = useState("");
-  const [coverArtUrl, setCoverArtUrl] = useState("");
-  const [completed, setCompleted] = useState(false);
+  const[user, setUser] = useRecoilState(userState)
 
-  function handleSubmit(event) {
+useEffect(function () {
+if (localStorage.getItem('uid')) {
+            AuthModel.verify().then((response) => {
+                setUser(response.user)
+            })
+        }
+    }, [])
+
+  function handleSubmit(event,data) {
+    console.log(data)
     event.preventDefault();
+    let board = data.board
+    let legalMoveCandidates = data.legalMoveCandidates
+    let player = user 
 
-    GameModel.create({ title, publisher, coverArtUrl, completed })
+    GameModel.create({board, legalMoveCandidates, player})
       .then(data => {
+        console.log(data)
         props.history.push('/games')
       })
   }
 
   return (
-    <div>
-      <h2>New Game</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-input">
-          <label htmlFor="title">Title</label>
-          <input 
-            type="text" 
-            name="title" 
-            onChange={(e) => setTitle(e.target.value)}
-            value={title} />
-        </div>
-        <div className="form-input">
-          <label htmlFor="publisher">Publisher</label>
-          <input 
-            type="text" 
-            name="publisher" 
-            onChange={(e) => setPublisher(e.target.value)}
-            value={publisher} />
-        </div>
-        <div className="form-input">
-          <label htmlFor="coverArtUrl">Image URL</label>
-          <input 
-            type="text" 
-            name="coverArtUrl" 
-            onChange={(e) => setCoverArtUrl(e.target.value)}
-            value={coverArtUrl} />
-        </div>
-        <div className="form-input">
-          <label htmlFor="completed">Completed</label>
-          <input 
-            type="checkbox" 
-            id="completed" 
-            checked={completed} 
-            onChange={(e) => setCompleted(!completed)} />
-        </div>
-
-        <input type="submit" value="Save!"/>
-      </form>
-    </div>
+      <GameBoard
+      handleSubmit={handleSubmit}
+      />
   );
 }
 

@@ -15,7 +15,17 @@ export default function GamePiece(props) {
       blue: '#5593ff',
       yellow: '#ffff00'
     }
-  let timer = null
+  let timer = useRef(null)
+  const timerHandler = (newValue) => { 
+    if(newValue>0){
+      timer.current = setTimeout(() => {
+        setMood('happy')
+      }, 800);
+    }
+    else{
+      clearTimeout(timer.current)
+    }
+  }
   
   const checkMoveValidity = (props) => {
     let validMoves = [parseInt(grabbedPiece.id-1), parseInt(grabbedPiece.id)+1, parseInt(grabbedPiece.id)+props.width,parseInt(grabbedPiece.id)-props.width]
@@ -53,6 +63,7 @@ export default function GamePiece(props) {
     if(e.currentTarget.className==='piece') {
       if(firstClick) {
         firstClick = !firstClick
+        setMood(props.mood)
         // console.log("first click= ", firstClick)
         grabbedPiece= e.currentTarget
         // console.log("this is the grabbedPiece",grabbedPiece)
@@ -62,9 +73,12 @@ export default function GamePiece(props) {
         // console.log("secondClick")
         firstClick=!firstClick
         dropTarget = e.currentTarget
+        dropTarget.style.background='blue'
+
         // console.log("this is the droptarget", dropTarget)
         swapPieces(props)
         grabbedPiece.style.background = ""
+        dropTarget.style.background = ""
         grabbedPiece=null
         dropTarget=null
         setMood(props.mood)
@@ -81,12 +95,12 @@ export default function GamePiece(props) {
 
   const mouseEnterMood = () => {
     // console.log(timer)
-    clearTimeout(timer)
+    timerHandler(0)
       setMood('blissful')
   }
     const mouseLeaveMood = () => {
       setMood('sad')
-      timer = setTimeout(() => {
+      timer.current = setTimeout(() => {
         setMood('happy')
       }, 600);
       // console.log(timer)

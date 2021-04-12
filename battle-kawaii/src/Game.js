@@ -3,6 +3,7 @@
 export default class Game {
   puzzlePieces = ['red','green','blue','yellow']
   legalMoveCandidates = []
+  board 
   players= {
     playerHp: 20,
     opponentHp: 20,
@@ -17,12 +18,9 @@ export default class Game {
       yellow: null,
     },
   }
-  board
-  start = () => {
-    console.log("HEYHEYHEY I'm a new instance of the game!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    this.board = this.createGameBoard(6,6)
-    this.randomizeBoard()
-  }
+  // board= this.createGameBoard()
+  // board2 = this.randomizeBoard()
+
   createGameBoard = (x, y) => {
     let board = []
     for( let i = 0 ; i < x ; i++) {
@@ -325,7 +323,12 @@ swapPieces = (x1,y1,x2,y2) =>{
   this.updateGame(results1,results2)
   console.log("game after:", this.board)
 }
-this.start()
+start= () => {
+  console.log("HEYHEYHEY I'm a new instance of the game!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+  this.board = this.createGameBoard(6,6)
+  this.randomizeBoard()
+}
+// start = this.start()
 }
 // export const puzzlePieces = ['red','green','blue','yellow']
 // export const this.legalMoveCandidates = []

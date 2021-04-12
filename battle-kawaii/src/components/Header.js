@@ -35,15 +35,16 @@ import AuthModel from "../models/AuthModel"
     <header>
       <div className="logo">
       <img className='cloud' src="https://react-kawaii.vercel.app/57b7927ff69b4a4c52239da6edd24e3e.svg" alt=""/>
-        <Link to={'/'}>Games!</Link>
+        <Link to={'/'}>Home</Link>
       </div>
       <div className="links">
         <img className='cloud' src="https://react-kawaii.vercel.app/57b7927ff69b4a4c52239da6edd24e3e.svg" alt=""/>
         <ul>
           { user ? (
             <>
-              <li><Link to={'/games'}>All Games</Link></li>
-              <li><Link to={'/games/new'}>Add New Game</Link></li>
+            {/* For planned PVP feature in the future */}
+              {/* <li><Link to={'/games'}>All Games</Link></li> */}
+              <li><Link to={'/games/new'}>New Game</Link></li>
               <li className="btn" onClick={ logout }>Log out</li>
             </>
           ) : (
