@@ -13,23 +13,25 @@ import Game from '../Game'
 import './GameBoard.scss'
 
   const GameBoard = (props) => {
-    const colors = {
-      green: '#45ff67',
-      red: '#ff4567',
-      blue: '#5593ff',
-      yellow: '#ffff00'
-    }
+
     const shouldBlockNavigation=true
     const game = useRef(new Game())
-    const gameHandler= () =>{
-      if(props.loadGame){
-        // initialize game to previous state
-      }
+    // let firstLoad = useRef(true)
+    const gameHandler= (props) =>{
+      console.log("these are props%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",props)
+      // if(firstLoad){
+      //   console.log(props,game.current,"#@$%$#@%$#%@$%#$@%#$@%#$%@#$#@%$#%@#$%#$@%$#@%$#%@$#%$@#%$@#%$#%@$#%$@%#$@%#$%@#$%#@$%@#$%")
+      //   game.current.start()
+      //   // game.current.board = props.board
+      //   // game.current.legalMoveCandidates= props.legalMoveCandidates
+      //   // initialize game to previous state
+      //   firstLoad.current = false
+      // }
       if(!game.current.board){
         game.current.start()
       } 
     }
-    gameHandler()
+    gameHandler(props)
     // game.current.start()
     // let board = game.board
     // const [gameState, setGameState] = useState(new Game() )

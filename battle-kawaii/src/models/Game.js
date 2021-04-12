@@ -22,6 +22,12 @@ class GameModel {
     })
       .then(res => res.json())
   }
+  //planned feature
+  // static update = (gameData)=>{
+  //   return fetch(`${url}/games/${gameId}`,{
+  //     method: "PUT"
+  //   })
+  // }
 }
 
 export default GameModel

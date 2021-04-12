@@ -1,20 +1,14 @@
-import React, { Component,useRef } from 'react'
-// import openSocket from 'socket.io-client';
-// const socket = openSocket('http://localhost:8000');
+import React from 'react'
+import HomeKawaii from '../components/HomeKawaii'
 
-export default class Home extends Component {
-  // this.sendSocketIO = this.sendSocketIO.bind(this);
-  // sendSocketIO() {
-    // socket.emit('example_message', 'demo');
-    // }
-    render() {
-    return (
-      <div>
-        Home
-        <div>
-          {/* <button onClick={this.sendSocketIO}>Send Socket.io</button> */}
-        </div>
+export default function Home() {
+  return (
+    <div>
+        <HomeKawaii
+        size={224}
+        color={'red'}
+        mood={'happy'}
+        />
       </div>
     )
   }
-}

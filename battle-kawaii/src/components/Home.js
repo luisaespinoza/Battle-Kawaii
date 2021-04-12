@@ -1,20 +1,22 @@
-import React, { Component } from 'react'
-// import openSocket from 'socket.io-client';
-// const socket = openSocket('http://localhost:8000');
+import React, {useState} from 'react'
+import HomeKawaii from '../components/HomeKawaii'
 
-export default class Home extends Component {
-  // this.sendSocketIO = this.sendSocketIO.bind(this);
+export default function Home() {
+  const [mood,setMood] = useState('happy')
+  const [color,setColor] = useState('red')
+  const [shape, setShape] = useState('Planet')
 
-  // sendSocketIO() {
-    // socket.emit('example_message', 'demo');
-  render() {
-    return (
-      <div>
-        Home
-        <div>
-          {/* <button onClick={this.sendSocketIO}>Send Socket.io</button> */}
-        </div>
+  return (
+    <div>
+        <HomeKawaii
+        size={360}
+        color={color}
+        mood={mood}
+        shape={shape}
+        />
+        {/* <button onClick={handleColorButton}>Change Color</button>
+        <button onClick={handleMoodButton}>Change Mood</button>
+        <button onClick={handleShapeButton}>Change Shape</button> */}
       </div>
     )
   }
-}
