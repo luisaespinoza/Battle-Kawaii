@@ -1,9 +1,18 @@
-
-.image-wrap {
-  width: 500px;
-  margin: 0 auto;
-  
-  img {
-    max-width: 100%;
-  }
+.game-card {
+  height: 390px;
+  width: 360px;
+  min-width: 145px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 80px;
+  margin-top: 50px;
+  background-color: rgba(109, 127, 151, 0.5);
+  padding:5px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) inset, 0 1px 0 #fff;
+  color: #85796b;
+}
+.home-piece {
+  height: 64px;
+  width: 64px;
 }

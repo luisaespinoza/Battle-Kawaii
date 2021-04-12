@@ -1,16 +1,15 @@
 
 import React from 'react';
+import HomeKawaii from '../components/HomeKawaii'
 import './GameCard.scss'
 
 const GameCard = (props) => {
   return (
     <div className="GameCard">
-      <div className="image-wrap">
-        <img src={ props.coverArtUrl } alt="Game art"/>
-      </div>
-      <h3>{ props.title }</h3>
-      <p>By: { props.publisher }</p>
-      <hr />
+      <HomeKawaii
+      size={64}
+      noButtons={true}
+      />
     </div>
   );
 }

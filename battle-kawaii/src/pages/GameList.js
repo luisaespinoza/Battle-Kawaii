@@ -17,11 +17,11 @@ function GameList(props) {
 
   return (
     <div>
-      <h1>All Games</h1>
-      {/* conditional rendering allows us to show a user 
-          content while the renders componenets and gets data from an API */}
-      { games.length ? generateList(games) : "Loading..." }
-      <button onClick={fetchGames}>Get Games</button>
+      <div className='games-container'>
+        <h1>All Games</h1>
+        { games.length ? generateList(games) : "Loading..." }
+        {/* <button onClick={fetchGames}>Get Games</button> */}
+      </div>
     </div>
   )
 }

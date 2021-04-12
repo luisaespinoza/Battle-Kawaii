@@ -20,11 +20,9 @@ import AuthModel from "../models/AuthModel"
           setUser(response.user)
         })
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   
 
-  // logout will set global userState to null
   function logout() {
     setUser(null)
     localStorage.clear()
@@ -43,7 +41,7 @@ import AuthModel from "../models/AuthModel"
           { user ? (
             <>
             {/* For planned PVP feature in the future */}
-              {/* <li><Link to={'/games'}>All Games</Link></li> */}
+              <li><Link to={'/games'}>All Games</Link></li>
               <li><Link to={'/games/new'}>New Game</Link></li>
               <li className="btn" onClick={ logout }>Log out</li>
             </>
