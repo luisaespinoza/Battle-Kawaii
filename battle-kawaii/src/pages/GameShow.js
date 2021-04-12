@@ -7,10 +7,8 @@ import { useRecoilState } from "recoil";
 import useGames from '../hooks/useGames'
 
 function GameShow(props) {
-  console.log("these are the show page's props<><><><><><><><><><><><><><><><><><><><><><>", props)
   const[user, setUser] = useRecoilState(userState)
   const [game , setGame] = useState(useGames(props.match.params.id))
-console.log("this the game state.......",game)
 useEffect(function () {
 if (localStorage.getItem('uid')) {
             AuthModel.verify().then((response) => {
@@ -20,7 +18,7 @@ if (localStorage.getItem('uid')) {
     }, [])
 
   function handleSubmit(event,data) {
-    console.log(data)
+
     event.preventDefault();
     let board = data.board
     let legalMoveCandidates = data.legalMoveCandidates
@@ -28,7 +26,6 @@ if (localStorage.getItem('uid')) {
 
     GameModel.create({board, legalMoveCandidates, player})
       .then(data => {
-        console.log(data)
         props.history.push('/games')
       })
   }

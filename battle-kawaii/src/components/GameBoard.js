@@ -34,7 +34,6 @@ import './GameBoard.scss'
       props.handleSubmit(e,game.current)
 
     }
-    console.log(boardState)
     function generatePieces(board) {
       return board.map((rows, index1) => 
         { return rows.map((piece,index2)=>{

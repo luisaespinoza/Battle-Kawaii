@@ -105,7 +105,6 @@ checkMatches = (x, y) => {
   let xHasMatches = matchRanges[0] >= 3
   let yHasMatches = matchRanges[1] >= 3
   if (xHasMatches || yHasMatches){
-    console.log(matchResults)
     let x = matchResults.start[0]
     let y = matchResults.start[1]
     matchResults.xMatchColor= xHasMatches ? this.board[x][y] : null
@@ -150,7 +149,6 @@ randomizeBoard = () => {
       // succeeding, carry on to next tile
     }
   }
-  console.log(this.board)
 }
 
 checkBoardHasMoves = () => {
