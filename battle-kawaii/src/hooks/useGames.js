@@ -4,7 +4,6 @@ import GameModel from "../models/Game"
 // define the custom hook with the "use" naming convention
 function useGames(gameId) {
   const [games, setGames] = useState([])
-
   // fetch the games to here in the custom hook
   function fetchGames(id) { 
     if (id) {
@@ -21,6 +20,7 @@ function useGames(gameId) {
 
   useEffect(
     function () {
+      console.log("carmen once requested I put a console log here to confirm that unicorns really do exist")
       fetchGames(gameId)
     },
     // useEffect will run on initial call and whenever the gameId changes

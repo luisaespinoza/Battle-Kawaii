@@ -1,11 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
+import HomeKawaii from '../components/HomeKawaii'
 
-export default class Home extends Component {
-  render() {
-    return (
-      <div>
-        Home
+export default function Home() {
+
+
+  return (
+    <div>
+        <HomeKawaii
+        size={300}
+        noButton={false}
+        />
       </div>
     )
   }
-}

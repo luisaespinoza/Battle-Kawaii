@@ -1,11 +1,14 @@
-import React from 'react';
+import React from 'react'
+import HomeKawaii from '../components/HomeKawaii'
 
-const Home = () => {
+export default function Home() {
   return (
     <div>
-      <h1>Welcome to Battle Kawaii</h1>
-    </div>
-  );
-}
-
-export default Home;
+        <HomeKawaii
+        size={224}
+        color={'red'}
+        mood={'happy'}
+        />
+      </div>
+    )
+  }

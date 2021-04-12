@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { loggedInState } from '../recoil/selectors'
 
-import Home from '../pages/Home'
+import Home from '../components/Home'
 import GameList from '../pages/GameList'
 import GameShow from '../pages/GameShow'
 import NewGame from '../pages/NewGame'

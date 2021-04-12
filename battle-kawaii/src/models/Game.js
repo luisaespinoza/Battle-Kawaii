@@ -1,9 +1,11 @@
-const url = `http://localhost:4000/api/v1`
+const url = `http://localhost:3001/api/v1`
 
 class GameModel {
   // the "static" keyword allows us to invoke the method without an instance of the class
   static all = () => {
-    return fetch(`${url}/games`).then(res => res.json())
+    return fetch(`${url}/games`, {
+      headers: { authorization: `Bearer ${ localStorage.uid }` }
+    }).then(res => res.json())
   }
 
   static show = (gameId) => {
@@ -20,6 +22,12 @@ class GameModel {
     })
       .then(res => res.json())
   }
+  //planned feature
+  // static update = (gameData)=>{
+  //   return fetch(`${url}/games/${gameId}`,{
+  //     method: "PUT"
+  //   })
+  // }
 }
 
 export default GameModel

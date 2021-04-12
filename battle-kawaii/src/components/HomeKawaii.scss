@@ -1,0 +1,13 @@
+.home-piece-container{
+  display: flex;
+  flex-direction: column;
+  .home-piece {
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-align: center;
+    align-content: center;
+  }
+  .buttons-container {
+    padding-top: 320px;
+  }
+}

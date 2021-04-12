@@ -1,0 +1,31 @@
+header {
+  background-color: rgb(205, 236, 254);
+  text-align: left;
+  padding: 20px 10px;
+  // margin: 20px 10px;
+  display: flex;
+  justify-content: space-between;
+  .cloud {
+
+  }
+
+  a {
+    color: #000000;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: darken(#fff, 20%)
+    }
+  }
+
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    
+    li {
+      list-style-type: none;
+      padding: 0px 10px;
+    }
+  }
+}
